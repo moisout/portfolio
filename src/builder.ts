@@ -27,8 +27,10 @@ export const buildHtml = async (configFilePath: string) => {
     console.log(err);
   }
 
+  const pagesContent = generatePagesContent(config.pages);
+
   const templateData = {
-    ...config,
+    title: config.title,
     baseStyle: `<style>${baseStyle}</style>`
   };
 
@@ -43,6 +45,10 @@ export const buildHtml = async (configFilePath: string) => {
 
   fs.writeFileSync(outputFilePath, html);
 };
+
+const generatePagesContent = async (
+  pages: Config['pages']
+): Promise<Array<{ title: string; id: number }>> => {};
 
 const renderSCSS = async (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
