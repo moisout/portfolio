@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "strict": true,
+    "removeComments": true,
+    "outDir": "build",
+    "rootDir": "src",
+    "allowJs": true,
+    "types": ["@types/node"]
+  },
+  "exclude": [".yarn"],
+  "include": ["src/**/*"]
+}

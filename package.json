@@ -1,0 +1,24 @@
+{
+  "name": "portfolio",
+  "scripts": {
+    "build": "rimraf build && yarn tsc",
+    "generate": "node build/index.js",
+    "build:generate": "yarn build && yarn generate"
+  },
+  "dependencies": {
+    "@types/html-minifier": "^4.0.0",
+    "chalk": "^4.1.1",
+    "html-minifier": "^4.0.0",
+    "mustache": "^4.2.0",
+    "rimraf": "^3.0.2",
+    "sass": "^1.32.12",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/mustache": "^4.1.1",
+    "@types/node": "^15.0.2",
+    "@types/rimraf": "^3.0.0",
+    "@types/sass": "^1.16.0",
+    "@yarnpkg/pnpify": "^3.0.0-rc.3"
+  }
+}

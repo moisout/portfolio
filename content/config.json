@@ -1,0 +1,7 @@
+{
+  "title": "Maurice Oegerli - Portfolio",
+  "pages": [
+    { "name": "Home", "source": "home.md" },
+    { "name": "Projects", "source": "projects.html" }
+  ]
+}
