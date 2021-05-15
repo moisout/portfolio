@@ -8,10 +8,15 @@
     {{{ baseStyle }}}
   </head>
   <body>
-    <nav>
-      {{ #pages }}<input type="radio" name="pages" id="{{id}}" />
-      <label for="{{id}}">{{ title }}</label>{{ /pages }}
-    </nav>
-    {{ body }}
+    <main>
+      {{ #pages }}
+      <div class="nav-item">
+        <label class="nav-label" for="{{id}}">{{ title }}</label>
+        <input type="radio" name="pages" id="{{id}}" class="pages-input"
+        {{#checked}}checked{{/checked}} />
+        <div class="page-content page-{{id}}">{{{htmlContent}}}</div>
+      </div>
+      {{ /pages }}
+    </main>
   </body>
 </html>

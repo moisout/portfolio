@@ -5,6 +5,9 @@ import mustache from 'mustache';
 import path from 'path';
 import sass from 'sass';
 import { minify } from 'html-minifier';
+import marked from 'marked';
+
+type PagesContent = { title: string; id: number; htmlContent: string; checked: boolean };
 
 const baseTemplatePath = 'template/base.html';
 const baseStylePath = 'style/base.scss';
@@ -12,6 +15,8 @@ const baseStylePath = 'style/base.scss';
 const outFolder = 'out';
 const outputFile = 'index.html';
 const outputFilePath = path.join(outFolder, outputFile);
+
+const contentPagePath = 'content/pages';
 
 export const buildHtml = async (configFilePath: string) => {
   const config = getConfig(configFilePath);
@@ -31,7 +36,8 @@ export const buildHtml = async (configFilePath: string) => {
 
   const templateData = {
     title: config.title,
-    baseStyle: `<style>${baseStyle}</style>`
+    baseStyle: `<style>${baseStyle}</style>`,
+    pages: pagesContent
   };
 
   const rawHtml = mustache.render(baseTemplate, templateData);
@@ -46,9 +52,37 @@ export const buildHtml = async (configFilePath: string) => {
   fs.writeFileSync(outputFilePath, html);
 };
 
-const generatePagesContent = async (
-  pages: Config['pages']
-): Promise<Array<{ title: string; id: number }>> => {};
+const generatePagesContent = (pages: Config['pages']): Array<PagesContent> => {
+  const pagesArray: Array<PagesContent> = [];
+  pages.forEach((page, i) => {
+    const pagePath = path.join(contentPagePath, page.source);
+    const fileEnding = page.source.match(/\.[0-9a-z]+$/i)?.[0];
+    if (fileEnding && fs.existsSync(pagePath)) {
+      const pageFileContent = fs.readFileSync(pagePath, 'utf8');
+      if (fileEnding === '.md') {
+        const renderedPage = marked(pageFileContent);
+        pagesArray.push({
+          title: page.name,
+          id: i,
+          checked: i === 0,
+          htmlContent: renderedPage
+        });
+      } else if (fileEnding === '.html') {
+        pagesArray.push({
+          title: page.name,
+          id: i,
+          checked: i === 0,
+          htmlContent: pageFileContent
+        });
+      } else {
+        logger.error(`Unsupported file extension for page "${page.name}": "${page.source}"`);
+      }
+    } else {
+      logger.error(`Unsupported source for page "${page.name}": "${page.source}"`);
+    }
+  });
+  return pagesArray;
+};
 
 const renderSCSS = async (path: string): Promise<string> => {
   return new Promise((resolve, reject) => {
